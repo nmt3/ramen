@@ -1,2 +1,19 @@
-<h1>Public::Posts#index</h1>
-<p>Find me in app/views/public/posts/index.html.erb</p>
+<%= notice %>
+
+<div class="post">
+  <%= link_to "情報提供する", new_post_path %>
+  <h3>投稿一覧</h3>
+  <% @posts.each do |post| %>
+    <% if post.image.attached? %>
+      <%= image_tag post.image, size: "100x100" %>
+    <% else %>
+      <%= image_tag 'no_image', size: "100x100" %>
+    <% end %><br>
+
+    <%= link_to post.store_name, post_path(post.id) %>
+  <p>
+    コメント
+  </p>
+  <p>評価</p>
+  <% end %>
+</div>
