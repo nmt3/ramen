@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :public do
+    get 'relationships/followings'
+    get 'relationships/followers'
+  end
  devise_for :customers,skip: [:passwords], controllers: {
   registrations: "public/registrations",
   sessions: "public/sessions"
@@ -14,14 +18,16 @@ Rails.application.routes.draw do
     resources :customers, only: [:show, :edit, :update] do
       collection do
         get :quit
+        get :list
         patch :out
       end
+      resource :relationships, only: [:create, :destroy]
+        get 'followings' => 'relationships#followings', as: 'followings'
+        get 'followers' => 'relationships#followers', as: 'followers'
     end
-    resources :posts, except: [:new, :index, :edit, :create, :update, :destroy]
-    resources :posts, except: [:show] do
+    resources :posts, only: [:new, :index, :show, :edit, :create, :update, :destroy] do
       resources :bookmarks, only: [:create, :index, :destroy]
     end
-    resources :stores, only: [:index, :show]
   end
 
   devise_for :admin,skip: [:registrations, :passwords], controllers: {

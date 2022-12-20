@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_09_075422) do
+ActiveRecord::Schema.define(version: 2022_12_18_224924) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -65,6 +65,10 @@ ActiveRecord::Schema.define(version: 2022_12_09_075422) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "name", null: false
+    t.integer "age"
+    t.integer "sex"
+    t.integer "residence", default: 0, null: false
+    t.string "comment"
     t.boolean "is_deleted", default: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -73,6 +77,15 @@ ActiveRecord::Schema.define(version: 2022_12_09_075422) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_customers_on_email", unique: true
     t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
+  end
+
+  create_table "post_tags", force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_post_tags_on_post_id"
+    t.index ["tag_id"], name: "index_post_tags_on_tag_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -92,13 +105,21 @@ ActiveRecord::Schema.define(version: 2022_12_09_075422) do
     t.boolean "holiday_friday", null: false
     t.boolean "holiday_saturday", null: false
     t.boolean "holiday_sunday", null: false
+    t.boolean "public_holiday", null: false
     t.time "open", null: false
     t.time "close", null: false
     t.string "address"
-    t.string "other"
+    t.string "genre"
+    t.string "post_comment"
     t.float "latitude"
     t.float "longitude"
-    t.string "telephone_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "relationships", force: :cascade do |t|
+    t.integer "follower_id"
+    t.integer "followed_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -106,8 +127,14 @@ ActiveRecord::Schema.define(version: 2022_12_09_075422) do
   create_table "reviews", force: :cascade do |t|
     t.integer "customer_id", null: false
     t.integer "post_id", null: false
-    t.integer "star"
-    t.text "comment", null: false
+    t.integer "star", null: false
+    t.text "review_comment", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "genre"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -116,4 +143,6 @@ ActiveRecord::Schema.define(version: 2022_12_09_075422) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookmarks", "customers"
   add_foreign_key "bookmarks", "posts"
+  add_foreign_key "post_tags", "posts"
+  add_foreign_key "post_tags", "tags"
 end
