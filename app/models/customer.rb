@@ -44,7 +44,6 @@ class Customer < ApplicationRecord
   end
 
   enum sex_method: { men: 0, women: 1 }
-  enum age_method: { ten: 0, twenty: 1, thirty: 2, forty: 3, fifty: 4, sixty_or_more: 5 }
 
   enum residence:{
      "---":0,
@@ -57,5 +56,5 @@ class Customer < ApplicationRecord
      徳島県:36,香川県:37,愛媛県:38,高知県:39,
      福岡県:40,佐賀県:41,長崎県:42,熊本県:43,大分県:44,宮崎県:45,鹿児島県:46,
      沖縄県:47
-   }
+  }
 end

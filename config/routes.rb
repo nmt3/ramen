@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  namespace :public do
-    get 'relationships/followings'
-    get 'relationships/followers'
-  end
  devise_for :customers,skip: [:passwords], controllers: {
   registrations: "public/registrations",
   sessions: "public/sessions"
@@ -18,8 +14,10 @@ Rails.application.routes.draw do
     resources :customers, only: [:show, :edit, :update] do
       collection do
         get :quit
-        get :list
         patch :out
+      end
+      member do
+        get :list
       end
       resource :relationships, only: [:create, :destroy]
         get 'followings' => 'relationships#followings', as: 'followings'
@@ -38,7 +36,11 @@ Rails.application.routes.draw do
     get "/" => "homes#top"
     get 'homes/show'
     resources :posts, only: [:new, :index, :show, :edit, :create, :update, :destroy]
-    resources :customers, only: [:index, :show, :edit, :update]
+    resources :customers, only: [:index, :show, :edit, :update] do
+      member do
+        get :list
+      end
+    end
     resources :reviews, only: [:index, :destroy]
   end
 
