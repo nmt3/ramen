@@ -63,3 +63,14 @@ gem 'enum_help'
 gem 'kaminari','~> 1.2.1'
 gem 'gmaps4rails'
 gem 'geocoder'
+
+gem "ransack"
+
+gem 'rails-i18n'
+
+gem 'dotenv-rails'
+
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end

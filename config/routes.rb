@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   scope module: :public do
     root to: 'homes#top'
-    resources :reviews, only: [:index, :show, :edit, :create, :update, :destroy]
+    resources :reviews, only: [:create, :update, :destroy]
     resources :customers, only: [:show, :edit, :update] do
       collection do
         get :quit
@@ -18,13 +18,18 @@ Rails.application.routes.draw do
       end
       member do
         get :list
+        get :bookmark
       end
       resource :relationships, only: [:create, :destroy]
         get 'followings' => 'relationships#followings', as: 'followings'
         get 'followers' => 'relationships#followers', as: 'followers'
     end
+
     resources :posts, only: [:new, :index, :show, :edit, :create, :update, :destroy] do
-      resources :bookmarks, only: [:create, :index, :destroy]
+      resources :bookmarks, only: [:create, :destroy]
+      collection do
+        get 'search'
+      end
     end
   end
 
@@ -35,7 +40,8 @@ Rails.application.routes.draw do
   namespace :admin do
     get "/" => "homes#top"
     get 'homes/show'
-    resources :posts, only: [:new, :index, :show, :edit, :create, :update, :destroy]
+    get "search"
+    resources :posts, only: [:show, :edit, :create, :update, :destroy]
     resources :customers, only: [:index, :show, :edit, :update] do
       member do
         get :list

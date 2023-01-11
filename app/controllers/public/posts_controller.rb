@@ -1,17 +1,21 @@
 class Public::PostsController < ApplicationController
   before_action :authenticate_customer!
+  before_action :set_q, only: [:index, :search]
   def new
     @post = Post.new
   end
 
   def index
-    @posts = Post.all
+    @posts = params[:tag_id].present? ? Tag.find(params[:tag_id]).posts : Post.all
+
+    @q = Post.ransack(params[:q])
+    @post = @q.result(distinct: true)
   end
 
   def show
     @post = Post.find(params[:id])
     @review = Review.new
-    @reviews = Review.all
+    @reviews = @post.reviews
     @bookmarks_count = Bookmark.where(post_id: @post.id).count
   end
 
@@ -22,8 +26,11 @@ class Public::PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
     @post.customer_id = current_customer.id
-    @post.save
-    redirect_to post_path(@post.id)
+    if @post.save
+      redirect_to post_path(@post.id)
+    else
+      render :new
+    end
   end
 
   def update
@@ -38,20 +45,25 @@ class Public::PostsController < ApplicationController
     redirect_to posts_path
   end
 
+  def search
+    @results = @q.result
+  end
 
   private
+
+  def set_q
+    @p = Post.ransack(params[:q])
+  end
 
   def post_params
     params.require(:post).permit(:customer_id, :image, :store_name, :activity_monday,
     :activity_tuesday, :activity_wednesday, :activity_thursday, :activity_friday,
-    :activity_saturday, :activity_sunday,:holiday_monday, :holiday_tuesday,
-    :holiday_wednesday, :holiday_thursday, :holiday_friday, :holiday_saturday,
-    :holiday_sunday, :public_holiday, :open, :close, :holiday, :post_comment,
-    :latitude, :longitude, tag_ids: [])
+    :activity_saturday, :activity_sunday, :holiday, :business_time, :post_comment,
+    :address, :lat, :lng, :genre, tag_ids: [])
   end
 
   def review_params
-    params.require(:review).permit(:post_id, :star, :comment)
+    params.require(:review).permit(:customer_id, :post_id, :image, :star, :review_comment)
   end
 
 end

@@ -1,9 +1,43 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';
+.container {
+  padding-top: 30px;
+}
 
-// .text-align{
-//   margin-top: 50px;
-// }
+.top-text {
+  text-align: center;
+  padding-top: 20%;
+}
+
+.registration {
+  text-align: center;
+  padding-top: 10%;
+}
+
+.tag_check {
+  height: 20px;
+}
+
+.login {
+  text-align: center;
+  padding: 180px;
+}
+
+.subtitle {
+  padding-top: 20px;
+}
+
+.registration {
+  text-align: center;
+}
+
+.field {
+  text-align: center;
+}
+
+.post_list {
+  padding-top: 10px;
+}
 
 .like-btn {
   width: 25px;

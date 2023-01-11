@@ -1,5 +1,7 @@
 class Post < ApplicationRecord
   has_one_attached :image
+  geocoded_by :address
+  after_validation :geocode
 
   belongs_to :customer
 
@@ -9,15 +11,10 @@ class Post < ApplicationRecord
   has_many :reviews
   has_many :bookmarks, dependent: :destroy
 
+  validates :store_name, presence: true
+
   def bookmarked_by?(customer)
     bookmarks.where(customer_id: customer).exists?
   end
 
-  def before_start_time
-    if opening_time != nil && closing_time != nil
-      if closing_time < opening_time
-        errors.add(:close, "は開始時間よりも後に設定してください")
-      end
-    end
-  end
 end
